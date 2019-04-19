@@ -28,8 +28,10 @@ From a browser app on your phone. Call your Raspberry Pi IP:port followed by ```
 
 Next, call the intervalimeter api on the Raspberry Pi using the format /numberOfShots/wait/delay
 
-**numeberOfShots** is the number of pictures the camera will take
-**wait** is the number of second wait between shots
+**numeberOfShots** is the number of pictures the camera will take\
+**wait** is the number of second wait between shots\
 **delay** is the numer of seconds to wait before starting the sequence of shots
+
+
 
 
