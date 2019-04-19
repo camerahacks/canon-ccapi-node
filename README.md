@@ -32,6 +32,8 @@ Next, call the intervalimeter api on the Raspberry Pi using the format /numberOf
 **wait** is the number of second wait between shots\
 **delay** is the numer of seconds to wait before starting the sequence of shots
 
+```192.168.1.4:3000/interval/20/60/5```
 
+The above translates to: Wait 5 second to start shooting then take 20 pictures waiting 60 seconds between each picture.
 
 
