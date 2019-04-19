@@ -13,7 +13,7 @@ Required packages:
 
 ## Instructions
 
-Edit the '''config.json''' and edit the camera IP address. Port 8080 is the default port for canon cameras but feel free to change it if needed.
+Edit the ```config.json``` and edit the camera IP address. Port 8080 is the default port for canon cameras but feel free to change it if needed.
 
 The app is intended to be used as a WiFi intervalomer for Canon cameras that support CCAPI.
 
@@ -24,8 +24,12 @@ I have this installed on a Raspberry Pi in Access Point mode. I can connect my C
 The Phone does not need to be connected to the Pi once the intervalometer is started.
 
 From a browser app on your phone. Call your Raspberry Pi IP:port followed by ```/ccapi```. Example:
-```
-192.168.1.4:3000/ccapi
-```
+```192.168.1.4:3000/ccapi```
+
+Next, call the intervalimeter api on the Raspberry Pi using the format /numberOfShots/wait/delay
+
+*numeberOfShots* is the number of pictures the camera will take
+*wait* is the number of second wait between shots
+*delay* is the numer of seconds to wait before starting the sequence of shots
 
 
