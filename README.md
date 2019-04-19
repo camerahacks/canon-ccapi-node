@@ -28,11 +28,12 @@ The phone does not need to be connected to the Pi once the intervalometer sequen
 Connect the Canon camera to the Raspberry Pi.
 Connect your phone or any other device with an internet browser
 
-From a browser app on your device (cellphone). Call your Raspberry Pi IP:port followed by ```/ccapi```. Example:
+From a browser app on your device (cellphone). Call your Raspberry Pi IP:port followed by ```/ccapi```.\
+Example:\
 ```192.168.1.4:3000/ccapi```
 This will stablish a CCAPI connection between the camera and the Raspberry Pi.
 
-Next, using the same browser on your device (cellphone), call the intervalimeter api on the Raspberry Pi using the format /numberOfShots/wait/delay
+Next, using the same browser on your device (cellphone), call the intervalimeter api on the Raspberry Pi using the format ```/numberOfShots/wait/delay```
 
 **numeberOfShots** is the number of pictures the camera will take\
 **wait** is the number of second wait between shots\
