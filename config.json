@@ -2,5 +2,6 @@
     "IP": "192.168.1.11",
     "PORT": "8080",
     "VER": "ver100",
-    "AF": false
+    "AF": false,
+    "LCD": "off"
 }

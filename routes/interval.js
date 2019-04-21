@@ -1,54 +1,93 @@
 var request = require("request");
 
+var interval;
+
 exports.intervalShooting = function(req, res) {
 
 	var numberOfShots 	= req.params.shots;
 	var wait 			= req.params.wait*1000; //wait in seconds
 	var delay 			= req.params.delay*1000; //delay in seconds
 
+
+	//Turn off the display according to preferences
+	if(config.LCD = 'off'){
+		
+		var LCD = liveVew('small', 'off');
+	
+	};
+
 	if (delay > 0) {
+		
 		setTimeout(function() { intervalSequence(numberOfShots, wait, res) }, delay)
+	
 	} else {
+		
 		intervalSequence(numberOfShots, wait, res);
-	}
+	
+	};
+
+};
+
+exports.stopInterval = function(req, res) {
+
+	clearInterval(interval);
+
+	/*
+	/	wait 5 seconds to turn on the LCD screen
+	/	otherwise, camera will be busy saving the last photo
+	*/
+	setTimeout(function(){
+		var LCD = liveVew('small', 'on');
+		clearInterval(interval);
+	}, 5000);
+	
+	console.log("Stopped");
+	
+	res.send("Stopped");
 
 };
 
 
 function intervalSequence(numberOfShots, wait, res) {
 
-	var endpoint = '/ccapi/'+config.VER+'/shooting/control/shutterbutton';
-
 	var sequenceNumber = 0
-
-	var requestData = { "af":config.AF };
 
 	res.send("Started");
 
 	//fire one shot right away
-
-	var interval = setInterval(function(){
-
-		if(sequenceNumber < numberOfShots){
+	let shutter = tripShutter();
 	
-			sequenceNumber = sequenceNumber+1;
+	sequenceNumber = sequenceNumber+1;
 
-			request({
-						url: 'http://'+config.IP+':'+config.PORT+endpoint,
-						method: 'POST',
-						json: requestData
-					},
+	console.log("Tripped the Shutter "+sequenceNumber+" times");
 
-					function(error, response, body){
-						console.log(response.statusCode);
-						console.log(body.message);
-					});
+	interval = setInterval(function(){
 
+		sequenceNumber = sequenceNumber+1;
+
+		let shutter = tripShutter();
+
+		console.log(shutter);
+
+		if(shutter=200){
+			
 			console.log("Tripped the Shutter "+sequenceNumber+" times");
+		
+		};
 
+		if(sequenceNumber >= numberOfShots){
+			
+			console.log("Sequence Complete");
 
-		} else {
-			clearInterval(interval)
+			/*
+			/	wait 5 seconds to turn on the LCD screen
+			/	otherwise, camera will be busy saving the last photo
+			*/
+			setTimeout(function(){
+				var LCD = liveVew('small', 'on');
+				clearInterval(interval);
+			}, 5000);
+			
 		};
 
 	}, 	wait);

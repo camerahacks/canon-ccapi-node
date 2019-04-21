@@ -3,18 +3,18 @@ app = express();
 request = require('request');// call the request module, globally
 
 
+config = require('./config');
+ccapi = require('./routes/ccapi');
+interval = require('./routes/interval');
+
 //Build other app variables
 var port = 3000;
-config = require('./config');
-
-//var shutter		= require('./routes/shutter');
-var interval = require('./routes/interval');
-var ccapi = require('./routes/ccapi');
 
 app.use('/connect', ccapi.connect);
 
 //INTERVAL SHOOTING
 app.use('/interval/:shots/:wait/:delay', interval.intervalShooting);
+app.use('/interval/stop', interval.stopInterval);
 
 
 //APP PORT
