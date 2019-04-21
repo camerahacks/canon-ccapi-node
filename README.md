@@ -15,9 +15,9 @@ Required packages:
 
 Edit the ```config.json``` and edit the camera IP address. Port 8080 is the default port for canon cameras but feel free to change it if needed.
 
-The app is intended to be used as a WiFi intervalomer for Canon cameras that support CCAPI.
+The app is intended to be used as a WiFi intervalometer for Canon cameras that support CCAPI.
 
-I do not recommend using interval times shorter than 5 seconds. This application is meant to be used for long timelapses, not short burts of photos. Intervals shorter than 5 seconds might skip photos as the camera might be busy writing the photo to the memory card or responding to other commands. The CCAPI interface is not capable of queuing multiple concurrent requests.
+I do not recommend using interval times shorter than 5 seconds. This application is meant to be used for long timelapses, not short bursts of photos. Intervals shorter than 5 seconds might skip photos as the camera might be busy writing the photo to the memory card or responding to other commands. The CCAPI interface is not capable of queuing multiple concurrent requests.
 
 I have this app installed on a Raspberry Pi Zero W configured as an Access Point. I can connect my Canon EOS RP and my cellphone to the Raspberry Pi.
 
@@ -31,15 +31,15 @@ Connect your phone or any other device with an internet browser
 From a browser app on your device (cellphone). Call your Raspberry Pi IP:port followed by ```/ccapi```.\
 Example:\
 ```192.168.1.4:3000/ccapi```
-This will stablish a CCAPI connection between the camera and the Raspberry Pi.
+This will establish a CCAPI connection between the camera and the Raspberry Pi.
 
-Next, using the same browser on your device (cellphone), call the intervalimeter api on the Raspberry Pi using the format ```/numberOfShots/wait/delay```
+Next, using the same browser on your device (cellphone), call the intervalometer api on the Raspberry Pi using the format ```/numberOfShots/wait/delay```
 
 **numeberOfShots** is the number of pictures the camera will take\
 **wait** is the number of second wait between shots\
-**delay** is the numer of seconds to wait before starting the sequence of shots
+**delay** is the number of seconds to wait before starting the sequence of shots
 
-Example:
+Example:\
 ```192.168.1.4:3000/interval/20/60/5```
 
 The above translates to: Wait 5 second to start shooting then take 20 pictures waiting 60 seconds between each picture.
