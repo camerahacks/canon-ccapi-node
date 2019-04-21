@@ -36,7 +36,11 @@ This will establish a CCAPI connection between the camera and the Raspberry Pi.
 Next, using the same browser on your device (cellphone), call the intervalometer api on the Raspberry Pi using the format ```/numberOfShots/wait/delay```
 
 **numeberOfShots** is the number of pictures the camera will take\
+<<<<<<< HEAD
 **wait** is the number of second wait between shots\
+=======
+**wait** is the number of second between shots\
+>>>>>>> 5e9b5bbb8aceff65fd65592cf4f44b27cfd59216
 **delay** is the number of seconds to wait before starting the sequence of shots
 
 Example:\
