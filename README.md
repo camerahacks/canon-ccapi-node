@@ -46,3 +46,14 @@ The above translates to: Wait 5 second to start shooting then take 20 pictures w
 
 ### Important
 Currently, there is no way to gracefully stop the sequence once it has started. This is the next feature I will implement.
+
+## Reference
+
+```/connect```\
+Establhishes the connection with the CCAPI. This needs to be called before making any other requests
+
+```/interval/:shots/:wait/:delay```\
+Starts interval shooting
+
+```/interval/stop```\
+Stops interval shooting
