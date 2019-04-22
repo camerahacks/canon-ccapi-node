@@ -44,7 +44,6 @@ tripShutter = function() {
 				function(error, response, body){
 					console.log(response.statusCode);
 					console.log(body.message);
-					//return response.statusCode;
 				});
 
 }
@@ -67,6 +66,5 @@ liveVew = function(liveviewsize='small', cameraLCD='off') {
 				function(error, response, body){
 					console.log(response.statusCode);
 					console.log(body.message);
-					//return response.statusCode;
 				});
 }
