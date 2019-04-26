@@ -1,16 +1,20 @@
 var request = require("request");
 
 var interval;
+var isActive = false;
+var numberOfShots;
+var sequenceNumber;
 
 exports.intervalShooting = function(req, res) {
 
-	var numberOfShots 	= req.params.shots;
+	numberOfShots 		= req.params.shots;
 	var wait 			= req.params.wait*1000; //wait in seconds
 	var delay 			= req.params.delay*1000; //delay in seconds
 
+	isActive = true;
 
 	//Turn off the display according to preferences
-	if(config.LCD = 'off'){
+	if(config.LCD == 'off'){
 		
 		var LCD = liveVew('small', 'off');
 	
@@ -32,6 +36,8 @@ exports.stopInterval = function(req, res) {
 
 	clearInterval(interval);
 
+	isActive = false;
+
 	/*
 	/	wait 5 seconds to turn on the LCD screen
 	/	otherwise, camera will be busy saving the last photo
@@ -47,10 +53,27 @@ exports.stopInterval = function(req, res) {
 
 };
 
+exports.getStatus = function(req, res) {
+
+	if(isActive == false){
+		numberOfShots = 0;
+		sequenceNumber = 0;
+	}
+
+	var status = 	{	
+						'isActive': isActive,
+						'numberOfShots': numberOfShots ,
+						'sequenceNumber': sequenceNumber
+					};
+
+	res.send(status);
+
+};
+
 
 function intervalSequence(numberOfShots, wait, res) {
 
-	var sequenceNumber = 0
+	sequenceNumber = 0;
 
 	res.send("Started");
 
@@ -69,7 +92,7 @@ function intervalSequence(numberOfShots, wait, res) {
 
 		console.log(shutter);
 
-		if(shutter=200){
+		if(shutter == 200){
 			
 			console.log("Tripped the Shutter "+sequenceNumber+" times");
 		

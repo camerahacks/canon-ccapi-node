@@ -24,7 +24,6 @@ exports.connect = function(req, res) {
 
 };
 
-
 /*
 Camera Control functions without a direct call
 */
