@@ -55,11 +55,6 @@ exports.stopInterval = function(req, res) {
 
 exports.getStatus = function(req, res) {
 
-	if(isActive == false){
-		numberOfShots = 0;
-		sequenceNumber = 0;
-	}
-
 	var status = 	{	
 						'isActive': isActive,
 						'numberOfShots': numberOfShots ,
@@ -69,6 +64,11 @@ exports.getStatus = function(req, res) {
 	res.send(status);
 
 };
+
+exports.test = function(req, res) {
+	res.send("Yeah, this works!");
+
+}
 
 
 function intervalSequence(numberOfShots, wait, res) {

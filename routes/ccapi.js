@@ -14,7 +14,7 @@ exports.connect = function(req, res) {
 		},
 
 		function(error, response, body){
-				if(response.statusCode=200){
+				if(response.statusCode == 200){
 					res.send("Connected");
 				}else{
 					res.send("Sorry, could not connect")

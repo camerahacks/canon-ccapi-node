@@ -5,7 +5,7 @@
 	<title>DPHacks Wireless Intervalometer</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="author" content="DPHacks.com">
-	<script src="js/jquery.js"></script>
+	<!---<script src="js/jquery.js"></script>--->
 	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
 	<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
 	<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
@@ -19,13 +19,24 @@
 	  </div>
 	
 	  <div data-role="main" class="ui-content">
-	  	<div id="shutterCount"></div>
+	  	<fieldset class="ui-grid-a">
+	  		<div class="ui-block-a">
+	  			<div id="shutterCount"></div>
+	  		</div>
+	  		<div class="ui-block-b">
+	  			<div id="info">
+	  				<p id="shotsVal"></p>
+	  				<p>Clip: <span id="clipLength">0:03</span> @ 24fps</p>
+	  				<p>Event: <span id="eventLength">1:12</span> MM:SS</p>
+	  			</div>
+	  		</div>
+	  	</fieldset>
 		<form>
-			<a href="#" data-role="button">Start Sequence</a>
+			<a href="#" data-role="button" data-command="0" id="startButton" >Start Sequence</a>
 		    <label for="shots">Shots:</label>
-		    <input type="range" name="slider" id="shots" value="5" min="2" max="500" />
+		    <input type="range" name="slider" id="shots" value="24" min="2" max="5000" onchange="updateshots()" />
 		    <label for="wait">Wait:</label>
-		    <input type="range" name="slider" id="wait" value="15" min="5" max="1200" />
+		    <input type="range" name="slider" id="wait" value="3" min="2" max="1200" onchange="updateWait()" />
 		    <label for="delay">Delay:</label>
 		    <input type="range" name="slider" id="delay" value="5" min="1" max="60" />
 		    <div data-role="fieldcontain">
@@ -44,8 +55,9 @@
 	</div> 
 </body>
 <script>
-	var numberOfShots = 0;
+	var numberOfShots = 24;
 	var currentShot = 0;
+	var wait = 3;
 
 	//Progressbar Intialiazation 
 	var radialObj = radialIndicator('#shutterCount', {
@@ -60,27 +72,118 @@
 	        'url': '/status',
 	        'dataType': 'json',
 			'success': function(data){
-					numberOfShots = data.numberOfShots;
-					currentShot = data.sequenceNumber;
+					
 					console.log(data);
-					radialObj.option('maxValue', numberOfShots);
-					radialObj.option('format','#/'+numberOfShots);
-					radialObj.value(currentShot);
 					if(data.isActive == true){
 						refresh();
+						disableControls();
 
+					}else{
+						radialObj.option('maxValue', numberOfShots);
+						radialObj.option('format','#/'+numberOfShots);
+						radialObj.value(data.sequenceNumber);
 					};
 				}
      	});
 
 	});
 
+	$('#startButton').click(function() {
+		var buttonControl = $('#startButton').attr('data-command');
+	  	
+		if(buttonControl == 0){
+
+			//Get interval info
+			shots = $('#shots').val();
+			wait = $('#wait').val();
+			delay = $('#delay').val();
+
+	  		//Disable the sliders
+	  		disableControls();
+
+		  	endpoint = '/interval/'+shots+'/'+wait+'/'+delay;
+
+		  	console.log(endpoint);
+
+		  	//Start Shooting
+			$.ajax({
+		        'url': endpoint,
+				'success': function(data){
+						
+						console.log(data);
+					}
+	     	});
+	     	
+	     	//Refresh the counter
+	     	refresh();
+	     }
+
+     	if(buttonControl == 1){
+
+     		endpoint = '/interval/stop';
+     		//Stop Shooting
+     		$.ajax({
+		        'url': endpoint,
+				'success': function(data){
+						
+						console.log(data);
+					}
+	     	});
+     		console.log("Stop Shooting");
+     	}
+
+	});
+
+	function disableControls(){
+		$('#shots, #wait, #delay, #lcd').slider( "option", "disabled", true );
+		$('#startButton').text('Stop Sequence');
+		$('#startButton').attr('data-command', '1');
+	}
+
+	function enableControls(){
+		$('#shots, #wait, #delay, #lcd').slider( "option", "disabled", false );
+		$('#startButton').text('Start Sequence');
+		$('#startButton').attr('data-command', '0');
+	}
+
+	function updateshots(){
+		numberOfShots = $('#shots').val();
+		fps = 24;
+		length = fmtMSS(Math.floor(numberOfShots/fps));
+		$('#clipLength').text(length);
+		radialObj.option('maxValue', numberOfShots);
+		radialObj.option('format','#/'+numberOfShots);
+		updateWait();
+	}
+
+	function updateWait(){
+		wait = $('#wait').val();
+		event = fmtMSS(Math.floor(wait*numberOfShots));
+		console.log(event);
+		$('#eventLength').text(event);
+	}
+
+
+	function fmtMSS(s){return(s-(s%=60))/60+(9<s?':':':0')+s}
+
+
 	function refresh(){
-		setInterval(function() {
-			currentShot = currentShot+1;
-			console.log(currentShot);
-			radialObj.value(currentShot);
-		}, 2000);
+		var refreshInt = setInterval(function() {
+							$.ajax({
+						        'url': '/status',
+						        'dataType': 'json',
+								'success': function(data){
+										currentShot = data.sequenceNumber;
+										console.log("curent shot:"+currentShot);
+										radialObj.value(currentShot);
+										if(data.isActive==false){
+											clearInterval(refreshInt);
+											enableControls();
+										}
+									}
+					     	});
+							
+						}, 2000);
 	}
 	
 	//Start

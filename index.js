@@ -19,6 +19,7 @@ app.use('/connect', ccapi.connect);
 
 //BASIC COMMANDS INTERVAL
 app.use('/status', interval.getStatus);
+app.use('/test', interval.test);
 
 
 //INTERVAL SHOOTING
