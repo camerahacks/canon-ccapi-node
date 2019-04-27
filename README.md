@@ -53,9 +53,6 @@ Example:\
 
 The above translates to: Wait 5 second to start shooting then take 20 pictures waiting 60 seconds between each picture.
 
-### Important
-Currently, there is no way to gracefully stop the sequence once it has started. This is the next feature I will implement.
-
 ## Reference
 
 ```/connect```\
