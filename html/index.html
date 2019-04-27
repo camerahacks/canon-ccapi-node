@@ -1,0 +1,95 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+	<title>DPHacks Wireless Intervalometer</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="author" content="DPHacks.com">
+	<script src="js/jquery.js"></script>
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+	<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+	<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+	<script src="js/radialIndicator.js"></script>
+</head>
+
+<body>
+	<div data-role="page">
+	  <div data-role="header">
+		<h1>CCAPI Intervalometer</h1>
+	  </div>
+	
+	  <div data-role="main" class="ui-content">
+	  	<div id="shutterCount"></div>
+		<form>
+			<a href="#" data-role="button">Start Sequence</a>
+		    <label for="shots">Shots:</label>
+		    <input type="range" name="slider" id="shots" value="5" min="2" max="500" />
+		    <label for="wait">Wait:</label>
+		    <input type="range" name="slider" id="wait" value="15" min="5" max="1200" />
+		    <label for="delay">Delay:</label>
+		    <input type="range" name="slider" id="delay" value="5" min="1" max="60" />
+		    <div data-role="fieldcontain">
+			<label for="lcd">LCD During Shooting:</label>
+		    <select name="flip-1" id="lcd" data-role="slider">
+		        <option value="off">Off</option>
+		        <option value="on">On</option>
+		    </select>
+		    </div>
+		</form>
+	  </div>
+	
+	  <div data-role="footer">
+		<h1>{DPHacks.com}</h1>
+	  </div>
+	</div> 
+</body>
+<script>
+	var numberOfShots = 0;
+	var currentShot = 0;
+
+	//Progressbar Intialiazation 
+	var radialObj = radialIndicator('#shutterCount', {
+		barColor : '#87CEEB', //blue
+		barColor : '#f90E0E', //red
+		barWidth : 10,
+		format: '#/'+numberOfShots
+	}); 
+
+	$(document).ready(function () {
+		$.ajax({
+	        'url': '/status',
+	        'dataType': 'json',
+			'success': function(data){
+					numberOfShots = data.numberOfShots;
+					currentShot = data.sequenceNumber;
+					console.log(data);
+					radialObj.option('maxValue', numberOfShots);
+					radialObj.option('format','#/'+numberOfShots);
+					radialObj.value(currentShot);
+					if(data.isActive == true){
+						refresh();
+
+					};
+				}
+     	});
+
+	});
+
+	function refresh(){
+		setInterval(function() {
+			currentShot = currentShot+1;
+			console.log(currentShot);
+			radialObj.value(currentShot);
+		}, 2000);
+	}
+	
+	//Start
+	function start(){
+		currentShot = currentShot+1;
+		radialObj.option('maxValue',120);
+		radialObj.option('format','#/'+numberOfShots);
+		radialObj.value(currentShot);
+	}	
+	
+	</script>
+</html>
