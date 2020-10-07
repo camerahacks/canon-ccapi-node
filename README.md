@@ -55,6 +55,8 @@ The above translates to: Wait 5 second to start shooting then take 20 pictures w
 
 ## Reference
 
+I'm working to include all of Canon's CCAPI calls in ```ccapi.js```.
+
 ```/connect```\
 Establhishes the connection with the CCAPI. This needs to be called before making any other requests
 
